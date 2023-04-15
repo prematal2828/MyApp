@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MyApp.DataAccessLayer.Data;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
 using MyApp.Models.ViewModels;
+
 
 namespace MyApp.Web.Areas.Admin.Controllers
 {
@@ -11,10 +13,12 @@ namespace MyApp.Web.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _appDbContext;
+        private IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(IUnitOfWork appDbContext)
+        public ProductController(IUnitOfWork appDbContext, IWebHostEnvironment webHostEnvironment)
         {
             _appDbContext = appDbContext;
+            _webHostEnvironment=webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -45,38 +49,61 @@ namespace MyApp.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult CreateUpdate(int? id)
         {
-            CategoryVM categoryVM  = new CategoryVM();
+            ProductVM productVM = new ProductVM()
+            {
+                Product = new(),
+                Categories = _appDbContext.Category.GetAll().Select(x =>
+                new SelectListItem()
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                })
+            };
+
             if (id == null || id == 0)
             {
-                return View(categoryVM);
+
+                return View(productVM);
             }
-            
+
             else
             {
-                categoryVM.Category = _appDbContext.Category.GetT(x => x.Id == id);
-                if (categoryVM.Category == null)
+                productVM.Product = _appDbContext.Product.GetT(x => x.Id == id);
+                if (productVM.Product == null)
                 {
                     return NotFound();
                 }
-                return View(categoryVM);
+                return View(productVM);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateUpdate(CategoryVM categoryVM)
+        public IActionResult CreateUpdate(ProductVM productVM, IFormFile? file)
         {
 
             if (ModelState.IsValid)
             {
-              if (categoryVM.Category.Id == 0)
+                string fileName = string.Empty;
+                if (file!=null)
                 {
-                    _appDbContext.Category.Add(categoryVM.Category);
+                    string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
+                    fileName = Guid.NewGuid().ToString()+"-"+file.FileName;
+                    string filePath = Path.Combine(uploadDir, fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Product.ImageUrl = @"\Image\" + fileName;
+                }
+                if (productVM.Product.Id == 0)
+                {
+                    _appDbContext.Product.Add(productVM.Product);
                     TempData["success"] = "New Category Created";
                 }
-              else
+                else
                 {
-                    _appDbContext.Category.Update(categoryVM.Category);
+                    _appDbContext.Product.Update(productVM.Product);
                     TempData["success"] = "Category Updated";
                 }
 

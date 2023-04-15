@@ -1,0 +1,70 @@
+﻿@model MyApp.Models.ViewModels.ProductVM
+
+@{
+    ViewData["Title"] = "Create/Update";
+}
+
+<form method="Post" asp-action="CreateUpdate">
+    <input type="hidden" asp-for="Product.Id" />
+    <div class="border p-3 mt-4">
+        <div class="row pb-3">
+            <h2 class="text-primary">@((Model.Product == null || Model.Product.Id==0) ? "Create" : "Update")</h2>
+            <hr />
+        </div>
+        <div asp-validation-summary=All> </div>
+        <div class="row mb-3">
+            <label asp-for="Product.Name"></label>
+            <input asp-for="Product.Name" class="form-control" />
+            <span asp-validation-for="Product.Name" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.Description"></label>
+            <textarea asp-for="Product.Description" class="form-control"> </textarea>
+            <span asp-validation-for="Product.Description" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.Price"></label>
+            <input asp-for="Product.Price" class="form-control" />
+            <span asp-validation-for="Product.Price" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.ImageUrl"></label>
+            <input asp-for="Product.ImageUrl" id="imageUrl" class="form-select" type="file" name="file" />
+            <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
+        </div>
+        <div class="row mb-3">
+            <label asp-for="Product.CategoryId"></label>
+            <select asp-for="Product.CategoryId" asp-items="@Model.Categories" class="form-control">
+                <option selected disabled>--Select a Category--</option>
+
+            </select>
+
+            <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="row mb-3">
+            <button class="btn btn-primary" onclick="return ValidateEmpty()" type="submit">@((Model.Product == null || Model.Product.Id==0) ? "Create" : "Update")</button>
+        </div>
+    </div>
+    <a asp-action="Index" asp-controller="Category">Back to Category List</a>
+</form>
+
+@section scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        function ValidateEmpty() {
+            if (document.getElementById("imageUrl").value == "") {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
+}
