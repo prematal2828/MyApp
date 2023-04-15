@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyApp.DataAccessLayer.Data;
+using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
 
 namespace MyApp.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly IUnitOfWork _appDbContext;
 
-        public CategoryController(AppDbContext appDbContext)
+        public CategoryController(IUnitOfWork appDbContext)
         {
             _appDbContext=appDbContext;
         }
         public IActionResult Index()
         {
-            var categories = _appDbContext.Categories.ToList();
+            var categories = _appDbContext.Category.GetAll();
             return View(categories);
         }
         [HttpGet]
@@ -27,10 +28,10 @@ namespace MyApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                _appDbContext.Categories.Add(category);
-                _appDbContext.SaveChanges();
+                _appDbContext.Category.Add(category);
+                _appDbContext.Save();
                 TempData["success"] = "New Category Created";
                 return RedirectToAction("Index");
             }
@@ -41,12 +42,12 @@ namespace MyApp.Controllers
         public IActionResult Edit(int? id)
         {
 
-            if(id==null || id == 0)
+            if (id==null || id == 0)
             {
                 return NotFound();
             }
-            var category = _appDbContext.Categories.Find(id);
-            if(category==null)
+            var category = _appDbContext.Category.GetT(x => x.Id==id);
+            if (category==null)
             {
                 return NotFound();
             }
@@ -61,8 +62,8 @@ namespace MyApp.Controllers
 
             if (ModelState.IsValid)
             {
-                _appDbContext.Categories.Update(category);
-                _appDbContext.SaveChanges();
+                _appDbContext.Category.Update(category);
+                _appDbContext.Save();
                 TempData["success"] = "Category Updated";
                 return RedirectToAction("Index");
             }
@@ -78,10 +79,10 @@ namespace MyApp.Controllers
             {
                 return NotFound();
             }
-            var category = _appDbContext.Categories.Find(id);
-            _appDbContext.Categories.Remove(category);
+            var category = _appDbContext.Category.GetT(x => x.Id==id);
+            _appDbContext.Category.Delete(category);
             TempData["error"] = "Deleted";
-            _appDbContext.SaveChanges();
+            _appDbContext.Save();
 
 
             return RedirectToAction("Index");

@@ -9,7 +9,7 @@ using MyApp.DataAccessLayer.Data;
 
 #nullable disable
 
-namespace MyApp.Migrations
+namespace MyApp.DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20230413042352_Initial")]
