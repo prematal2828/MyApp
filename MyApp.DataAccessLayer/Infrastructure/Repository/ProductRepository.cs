@@ -31,7 +31,7 @@ namespace MyApp.DataAccessLayer.Infrastructure.Repository
                     existingproduct.ImageUrl = product.ImageUrl;
                 }
             }
-            _appDbContext.Products.Update(product);
+            //_appDbContext.Products.Update(product);
         }
     }
 }
