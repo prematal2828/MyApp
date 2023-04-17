@@ -15,16 +15,20 @@
     </div>
 </div>
 <div asp-validation-summary=All> </div>
-<table class="table table-bordered table" style="width: 100%">
+<table id="productTable" class="table table-bordered table" style="width: 100%">
     <thead>
         <tr>
             <th>Product Name</th>
             <th>Description</th>
             <th>Price</th>
-            <th>Image URL</th>
+            @*<th>Image URL</th>*@
             <th>Category</th>
+            <th>Action</th>
         </tr>
     </thead>
 
 </table>
 
+@section scripts{
+    <script src="~/js/product.js"></script>
+}

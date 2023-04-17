@@ -20,6 +20,14 @@ namespace MyApp.Web.Areas.Admin.Controllers
             _appDbContext = appDbContext;
             _webHostEnvironment=webHostEnvironment;
         }
+
+        #region APICALL
+        public IActionResult AllProducts()
+        {
+            var products = _appDbContext.Product.GetAll(includeProperties: "Category");
+            return Json(new { data = products });
+        }
+        #endregion
         public IActionResult Index()
         {
             ProductVM productVM = new ProductVM();
@@ -90,6 +98,15 @@ namespace MyApp.Web.Areas.Admin.Controllers
                     string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
                     fileName = Guid.NewGuid().ToString()+"-"+file.FileName;
                     string filePath = Path.Combine(uploadDir, fileName);
+
+                    if (productVM.Product.ImageUrl != null)
+                    {
+                        var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -99,12 +116,12 @@ namespace MyApp.Web.Areas.Admin.Controllers
                 if (productVM.Product.Id == 0)
                 {
                     _appDbContext.Product.Add(productVM.Product);
-                    TempData["success"] = "New Category Created";
+                    TempData["success"] = "New Product Created";
                 }
                 else
                 {
                     _appDbContext.Product.Update(productVM.Product);
-                    TempData["success"] = "Category Updated";
+                    TempData["success"] = "Product Updated";
                 }
 
                 _appDbContext.Save();
@@ -114,7 +131,8 @@ namespace MyApp.Web.Areas.Admin.Controllers
 
         }
 
-        [HttpGet]
+        #region DeleteAPICALL
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
 
@@ -122,13 +140,26 @@ namespace MyApp.Web.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var category = _appDbContext.Category.GetT(x => x.Id == id);
-            _appDbContext.Category.Delete(category);
-            TempData["error"] = "Deleted";
-            _appDbContext.Save();
 
+            var product = _appDbContext.Product.GetT(x => x.Id == id);
+            if (product == null)
+            {
+                return Json(new { success = false, message = "Error in fetching data" });
+            }
+            else
+            {
+                var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
 
-            return RedirectToAction("Index");
+                _appDbContext.Product.Delete(product);
+                TempData["error"] = "Deleted";
+                _appDbContext.Save();
+                return Json(new { success = true, message = "Product Deleted" });
+            }
         }
+        #endregion
     }
 }
