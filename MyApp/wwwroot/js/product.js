@@ -16,7 +16,7 @@ $(document).ready(function () {
                     "render": function (data) {
                         return `
                                 <a href="/Admin/Product/CreateUpdate?id=${data}" > <i class="bi bi-pencil"></i> </a >
-                                <a onClick=RemoveProduct("/Admin/Product/Delete/"${data})><i class="bi bi-trash"></i>  </a>
+                                <a onClick=RemoveProduct("/Admin/Product/Delete/"${data})><i class="bi bi-trash"></i> </a>
                                 `
                     }
                 }
