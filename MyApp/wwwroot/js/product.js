@@ -15,8 +15,8 @@ $(document).ready(function () {
                     "data": "id",
                     "render": function (data) {
                         return `
-                                <a href="/Admin/Product/CreateUpdate?id=${data}" > <i class="bi bi-pencil"></i> </a >
-                                <a onClick=RemoveProduct("/Admin/Product/Delete/"${data})><i class="bi bi-trash"></i> </a>
+                                <a href="/Admin/Product/CreateUpdate?id=${data}" > <i class="bi bi-pencil"></i> </a>
+                                <a href="#" onClick=RemoveProduct("/Admin/Product/Delete/${data}")><i class="bi bi-trash"></i></a>
                                 `
                     }
                 }
@@ -44,13 +44,14 @@ function RemoveProduct(url) {
 
             $.ajax({
                 url: url,
-                type: Delete,
+                type: 'DELETE',
                 success: function (data) {
                     if (data.success) {
-                        toaster.success("data.message");
+                        ptable.ajax.reload();
+                        toaster.success(data.message);
                     }
                     else {
-                        toaster.error("data.message");
+                        toaster.error(data.message);
                     }
                 }
             })
