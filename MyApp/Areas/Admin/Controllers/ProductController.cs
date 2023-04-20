@@ -111,7 +111,7 @@ namespace MyApp.Web.Areas.Admin.Controllers
                     {
                         file.CopyTo(fileStream);
                     }
-                    productVM.Product.ImageUrl = @"/Images/" + fileName;
+                    productVM.Product.ImageUrl = @"\Image\" + fileName;
                 }
                 if (productVM.Product.Id == 0)
                 {
@@ -148,21 +148,16 @@ namespace MyApp.Web.Areas.Admin.Controllers
             }
             else
             {
-                if (product.ImageUrl != null)
+                var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(oldImagePath))
                 {
-                    var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('\\'));
-                    if (System.IO.File.Exists(oldImagePath))
-                    {
-                        System.IO.File.Delete(oldImagePath);
-                    }
+                    System.IO.File.Delete(oldImagePath);
                 }
-               
 
                 _appDbContext.Product.Delete(product);
                 TempData["error"] = "Deleted";
                 _appDbContext.Save();
-                return Json(new { success = true, message = "Product Deleted !!!" });
-                //return RedirectToAction("Index");
+                return Json(new { success = true, message = "Product Deleted" });
             }
         }
         #endregion

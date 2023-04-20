@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyApp.Models;
 
 namespace MyApp.DataAccessLayer.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : DbContext
 
     {
         public AppDbContext(DbContextOptions options) : base(options)
