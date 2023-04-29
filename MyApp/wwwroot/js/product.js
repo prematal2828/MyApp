@@ -16,13 +16,15 @@ $(document).ready(function () {
                     "render": function (data) {
                         return `
                                 <a href="/Admin/Product/CreateUpdate?id=${data}" > <i class="bi bi-pencil"></i> </a >
-                                <a onClick=RemoveProduct("/Admin/Product/Delete/"${data})><i class="bi bi-trash"></i> </a>
+                                <a href="#" onclick=RemoveProduct("/Admin/Product/Delete/${data}") > <i class="bi bi-trash"></i> </a >
                                 `
                     }
                 }
             ]
         });
 });
+
+
 
 function RemoveProduct(url) {
 
@@ -36,17 +38,13 @@ function RemoveProduct(url) {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            //Swal.fire(
-            //    'Deleted!',
-            //    'Your file has been deleted.',
-            //    'success'
-            //)
 
             $.ajax({
                 url: url,
-                type: Delete,
+                type: 'DELETE',
                 success: function (data) {
                     if (data.success) {
+                        ptable.ajax.reload();
                         toaster.success("data.message");
                     }
                     else {

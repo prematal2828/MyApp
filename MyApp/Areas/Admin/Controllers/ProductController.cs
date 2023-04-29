@@ -111,7 +111,7 @@ namespace MyApp.Web.Areas.Admin.Controllers
                     {
                         file.CopyTo(fileStream);
                     }
-                    productVM.Product.ImageUrl = @"\Image\" + fileName;
+                    productVM.Product.ImageUrl = @"/Images/" + fileName;
                 }
                 if (productVM.Product.Id == 0)
                 {
