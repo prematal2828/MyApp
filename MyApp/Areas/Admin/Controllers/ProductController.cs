@@ -101,7 +101,8 @@ namespace MyApp.Web.Areas.Admin.Controllers
 
                     if (productVM.Product.ImageUrl != null)
                     {
-                        var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
+                        //var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productVM.Product.ImageUrl.TrimStart('\\'));
+                        var oldImagePath = _webHostEnvironment.WebRootPath + productVM.Product.ImageUrl.Replace('/', '\\');
                         if (System.IO.File.Exists(oldImagePath))
                         {
                             System.IO.File.Delete(oldImagePath);
