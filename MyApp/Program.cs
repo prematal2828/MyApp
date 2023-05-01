@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using MyApp.DataAccessLayer.Data;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.DataAccessLayer.Infrastructure.Repository;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using MyApp.CommonHelper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -27,9 +37,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication(); ;
 
 app.UseAuthorization();
-
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");

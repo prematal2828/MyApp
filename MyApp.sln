@@ -5,9 +5,11 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApp.Web", "MyApp\MyApp.Web.csproj", "{6FAA0FB3-A275-4F3E-B21F-3E2C746F7A3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp.Models", "MyApp.Models\MyApp.Models.csproj", "{5EF4A44F-B3F2-42CD-9903-516D88C08C32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApp.Models", "MyApp.Models\MyApp.Models.csproj", "{5EF4A44F-B3F2-42CD-9903-516D88C08C32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp.DataAccessLayer", "MyApp.DataAccessLayer\MyApp.DataAccessLayer.csproj", "{B4BAB116-4D26-4219-ACC8-3B8567141D27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApp.DataAccessLayer", "MyApp.DataAccessLayer\MyApp.DataAccessLayer.csproj", "{B4BAB116-4D26-4219-ACC8-3B8567141D27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp.CommonHelper", "MyApp.CommonHelper\MyApp.CommonHelper.csproj", "{A335A309-86BE-4209-B63E-351DB5708DFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{B4BAB116-4D26-4219-ACC8-3B8567141D27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4BAB116-4D26-4219-ACC8-3B8567141D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4BAB116-4D26-4219-ACC8-3B8567141D27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A335A309-86BE-4209-B63E-351DB5708DFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A335A309-86BE-4209-B63E-351DB5708DFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A335A309-86BE-4209-B63E-351DB5708DFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A335A309-86BE-4209-B63E-351DB5708DFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

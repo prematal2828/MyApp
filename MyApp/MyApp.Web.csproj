@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
@@ -18,10 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyApp.CommonHelper\MyApp.CommonHelper.csproj" />
     <ProjectReference Include="..\MyApp.DataAccessLayer\MyApp.DataAccessLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Identity\Data\" />
     <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>

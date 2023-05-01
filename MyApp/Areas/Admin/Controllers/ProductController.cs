@@ -149,7 +149,7 @@ namespace MyApp.Web.Areas.Admin.Controllers
             }
             else
             {
-                var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('\\'));
+                var oldImagePath = _webHostEnvironment.WebRootPath + product.ImageUrl.Replace('/', '\\');
                 if (System.IO.File.Exists(oldImagePath))
                 {
                     System.IO.File.Delete(oldImagePath);
