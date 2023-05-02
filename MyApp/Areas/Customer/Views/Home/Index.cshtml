@@ -11,7 +11,7 @@
             <div class="card-body">
                 <h5 class="card-title">@product.Name</h5>
                 <p class="card-text">Price: @product.Price.ToString("0.00")</p>
-                <a class="btn btn-primary" asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">Details</a>
+                <a class="btn btn-primary" asp-action="Details" asp-controller="Home" asp-route-ProductId="@product.Id">Details</a>
             </div>
         </div>
     }

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace MyApp.Web.Areas.Customer.Controllers
 {
@@ -16,11 +18,43 @@ namespace MyApp.Web.Areas.Customer.Controllers
             _logger = logger;
             _context = unitOfWork;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
-            IEnumerable<Product> products = _context.Product.GetAll(includeProperties:"Category");
+            IEnumerable<Product> products = _context.Product.GetAll(includeProperties: "Category");
             return View(products);
+        }
+        [HttpGet]
+        public IActionResult Details(int? ProductId)
+        {
+            Cart cart = new Cart()
+            {
+                Product = _context.Product.GetT(x => x.Id == ProductId, includeProperties: "Category"),
+                Count = 1,
+                ProductId = (int)ProductId,
+            };
+
+            return View(cart);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult Details(Cart cart)
+        {
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            cart.ApplicationUserId = claims.Value;
+
+            if (ModelState.IsValid)
+            {
+                _context.Cart.Add(cart);
+                _context.Save();
+            }
+
+
+
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()
